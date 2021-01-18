@@ -32,6 +32,7 @@
 #ifdef DEBUG_SVDATA
 #include "blt_util/log.hpp"
 #endif
+using namespace std;
 
 std::ostream& operator<<(std::ostream& os, const SVCandidateSetRead& svr)
 {
@@ -113,16 +114,18 @@ void SVCandidateSetSequenceFragmentSampleGroup::add(
   SVCandidateSetRead& targetRead(*targetReadPtr);
   if (targetRead.isSet()) {
     if (isExpectRepeat) return;
+    
 
-    std::ostringstream oss;
-    oss << "Unexpected alignment name collision. Source: '" << dataSourceName << "'\n"
+    cout << "Unexpected alignment name collision. Source: '" << dataSourceName << "'\n"
         << "\tExisting read: ";
-    summarizeAlignmentRecord(bamHeader, targetRead.bamrec, oss);
-    oss << "\n"
+    summarizeAlignmentRecord(bamHeader, targetRead.bamrec, cout);
+    cout << "\n"
         << "\tNew read: ";
-    summarizeAlignmentRecord(bamHeader, bamRead, oss);
-    oss << "\n";
-    BOOST_THROW_EXCEPTION(GeneralException(oss.str()));
+    summarizeAlignmentRecord(bamHeader, bamRead, cout);
+    cout << "\n";
+    return;
+    ///BOOST_THROW_EXCEPTION(GeneralException(oss.str()));
+
   }
 
   targetRead.bamrec                      = bamRead;
